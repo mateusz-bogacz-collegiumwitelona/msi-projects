@@ -1,0 +1,101 @@
+:root {
+  --bg: #121212;
+  --card: #1e1e1e;
+  --accent: #4dabf7;
+  --text: #e0e0e0;
+  --muted: #888;
+  --error: #ff6b6b;
+  --success: #51cf66;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.container {
+  background-color: var(--card);
+  padding: 30px;
+  border-radius: 15px;
+  margin-top: 40px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+  text-align: center;
+  color: var(--accent);
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+select, input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background-color: #2a2a2a;
+  color: var(--text);
+  transition: border-color 0.3s ease;
+}
+
+select:focus, input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+button {
+  width: 100%;
+  margin-top: 25px;
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #339af0;
+  transform: scale(1.02);
+}
+
+#result {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--accent);
+}
+
+.error {
+  color: var(--error);
+}
+
+.success {
+  color: var(--success);
+}

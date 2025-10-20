@@ -1,7 +1,8 @@
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse, Response
 from Services.getAlcoholQuizResponse import getAlcocholQuizResponse
 from DTO.alcocholQuizRequest import alcocholQuizRequest
-import uvicorn
+import uvicorn, os
 
 app = FastAPI(
     title="My Alcohol Quiz API",
@@ -10,6 +11,27 @@ app = FastAPI(
 )
 
 predict = getAlcocholQuizResponse()
+
+# Ścieżka do bieżącego folderu (backend)
+BASE_DIR = os.path.dirname(__file__)
+
+# 🔹 Serwowanie strony głównej (index.html)
+@app.get("/", response_class=HTMLResponse)
+def home():
+    file_path = os.path.join(BASE_DIR, "index.html")
+    if not os.path.exists(file_path):
+        return "<h2>Brak pliku index.html w katalogu backend</h2>"
+    with open(file_path, "r", encoding="utf-8") as f:
+        return f.read()
+
+# 🔹 Serwowanie arkusza stylów (style.css)
+@app.get("/style.css")
+def css():
+    file_path = os.path.join(BASE_DIR, "style.css")
+    if not os.path.exists(file_path):
+        return Response("/* Brak pliku style.css */", media_type="text/css")
+    with open(file_path, "r", encoding="utf-8") as f:
+        return Response(f.read(), media_type="text/css")
 
 @app.post(
     "/",
@@ -34,14 +56,13 @@ predict = getAlcocholQuizResponse()
     ),
     response_description="Przewidywana odpowiedź na quiz"
 )
+		
+		
+# 🔹 Endpoint POST — przetwarzanie quizu
+@app.post("/")
 def getAlcocholQuiz(data: alcocholQuizRequest):
-    """
-    Endpoint POST do przewidywania wyniku quizu alkoholowego.
-    Zwraca przewidywaną kategorię odpowiedzi na podstawie danych wejściowych.
-    """
     response = predict.predictAmswer(data)
     return {"answear": response}
-
 
 if __name__ == "__main__":
     uvicorn.run(
