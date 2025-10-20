@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Czy jesteś alkoholikiem?</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Czy jesteś alkoholikiem?</h1>
+    <p style="text-align:center;color:#888;font-size:0.9rem;margin-bottom:20px;">
+      Wypełnij wszystkie pola, aby otrzymać przewidywany wynik.
+    </p>
+
+    <form id="quizForm">
+      <h3>Samoocena i opinia otoczenia</h3>
+
+      <label>
+        Czy kiedykolwiek czułeś(aś) potrzebę ograniczenia picia?
+        <select name="FeltNeedToLimitDrinking">
+          <option value="false">Nie</option>
+          <option value="true">Tak</option>
+        </select>
+      </label>
+
+      <label>
+        Czy bliscy sugerowali Ci, że pijesz za dużo?
+        <select name="OthersSuggestedYouDrinkTooMuch">
+          <option value="false">Nie</option>
+          <option value="true">Tak</option>
+        </select>
+      </label>
+
+      <label>
+        Czy ludzie krytykowali Twoje picie i Cię to zdenerwowało?
+        <select name="GotAngryAtCriticism">
+          <option value="false">Nie</option>
+          <option value="true">Tak</option>
+        </select>
+      </label>
+
+      <h3>Częstotliwość i ilość</h3>
+
+      <label>
+        Ile dni pijesz w tygodniu?
+             <input type="number" name="DrinkingDaysPerWeek" min="0" max="30" step="1" value="0">
+      </label>
+
+      <label>
+        Jaką ilość alkoholu pijesz tygodniowo (np. liczba piw)?
+             <input type="number" name="WeeklyAlcoholAmount" min="0" max="100" step="1" value="0">
+      </label>
+
+      <h3>Stosunek emocjonalny i ekonomiczny</h3>
+
+      <label>
+        Czy lubisz picie alkoholu?
+        <select name="EnjoysDrinking">
+          <option value="false">Nie</option>
+          <option value="true">Tak</option>
+        </select>
+      </label>
+
+      <label>
+        Ile wydajesz tygodniowo na alkohol (zł)?
+              <input type="number" name="WeeklyAlcoholSpending" min="0" max="100000" step="1" value="0">
+      </label>
+
+      <h3>Skutki i zachowania</h3>
+
+      <label>
+        Czy kiedykolwiek czułeś(aś) się winny(a) z powodu picia?
+        <select name="FeltGuiltyAboutDrinking">
+          <option value="false">Nie</option>
+          <option value="true">Tak</option>
+        </select>
+      </label>
+
+      <label>
+        Czy kiedykolwiek piłeś(aś) alkohol rano?
+        <select name="DrinksInMorning">
+          <option value="false">Nie</option>
+          <option value="true">Tak</option>
+        </select>
+      </label>
+
+      <label>
+        Czy często myślisz o alkoholu?
+        <select name="ThinksOftenAboutAlcohol">
+          <option value="false">Nie</option>
+          <option value="true">Tak</option>
+        </select>
+      </label>
+
+      <label>
+        Czy trudno Ci przestać po jednym lub dwóch drinkach?
+        <select name="HardToStopAfterOneDrink">
+          <option value="false">Nie</option>
+          <option value="true">Tak</option>
+        </select>
+      </label>
+
+      <label>
+        Czy zdarza Ci się pić samemu lub w ukryciu?
+        <select name="DrinksAloneOrSecretly">
+          <option value="false">Nie</option>
+          <option value="true">Tak</option>
+        </select>
+      </label>
+
+      <label>
+        Czy próbowałeś(aś) przestać lub ograniczyć picie, ale Ci się nie udało?
+        <select name="TriedToQuitButFailed">
+          <option value="false">Nie</option>
+          <option value="true">Tak</option>
+        </select>
+      </label>
+
+      <label>
+        Czy picie stało się dla Ciebie sposobem na stres, nudę lub emocje?
+        <select name="UsesAlcoholToCope">
+          <option value="false">Nie</option>
+          <option value="true">Tak</option>
+        </select>
+      </label>
+
+      <button type="submit">Wyślij quiz</button>
+    </form>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+  const form = document.getElementById("quizForm");
+  const resultDiv = document.getElementById("result");
+
+
+  const descriptions = {
+    a: {
+      title: "Nie masz problemu",
+      text: "Twoje odpowiedzi wskazują, że picie nie stanowi dla Ciebie problemu. Zachowujesz kontrolę i nie ma oznak uzależnienia.",
+      color: "green" 
+    },
+    b: {
+      title: "Picie weekendowe",
+      text: "Twoje picie ma charakter okazjonalny lub towarzyski, ale warto zwracać uwagę na częstotliwość i ilość spożywanego alkoholu.",
+      color: "yellow"
+    },
+    c: {
+      title: "Problematyczne picie",
+      text: "Twoje odpowiedzi sugerują ryzykowne nawyki związane z alkoholem. Rozważ ograniczenie spożycia lub konsultację z lekarzem.",
+      color: "orange"
+    },
+    d: {
+      title: "Wysokie ryzyko – alkoholizm",
+      text: "Twoje odpowiedzi wskazują na poważny problem z alkoholem. Zdecydowanie zalecana jest profesjonalna pomoc i wsparcie specjalisty.",
+      color: "red"
+    }
+  };
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    resultDiv.textContent = "Wysyłanie danych...";
+
+    const formData = new FormData(form);
+    const payload = {};
+
+    for (const [key, value] of formData.entries()) {
+      if (value === "true" || value === "false") {
+        payload[key] = value === "true";
+      } else {
+        payload[key] = isNaN(parseFloat(value)) ? value : parseFloat(value);
+      }
+    }
+
+    try {
+      const res = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error("Błąd serwera");
+      const data = await res.json();
+
+      const ans = data.answear.toLowerCase();
+      const desc = descriptions[ans];
+
+      if (desc) {
+        resultDiv.innerHTML = `
+          <div style="margin-top:20px;text-align:center;">
+            <h2 style="color:${desc.color}; font-size:1.4rem; margin-bottom:8px;">
+              Wynik: ${desc.title}
+            </h2>
+            <p style="color:${desc.color}; font-size:1rem;">${desc.text}</p>
+          </div>`;
+      } else {
+        resultDiv.innerHTML = `Nieznany wynik (${data.answear})`;
+      }
+    } catch (err) {
+      console.error(err);
+      resultDiv.innerHTML = `<span class="error">Nie udało się połączyć z API</span>`;
+    }
+  });
+</script>
+</body>
+</html>
