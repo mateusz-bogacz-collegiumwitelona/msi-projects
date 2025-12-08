@@ -8,3 +8,15 @@ class SetGARequest(BaseModel):
     keep_parents: int = Field(2, ge=0, description="Number of parents to keep")
     mutation_percent_genes: int = Field(10, ge=0, le=100, description="Percentage of genes to mutate")
     
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "target": "mypassword",
+                "max_generations": 500,
+                "parents_mating": 20,
+                "sol_per_pop": 200,
+                "keep_parents": 5,
+                "mutation_percent_genes": 15
+            }
+        }
+    }
